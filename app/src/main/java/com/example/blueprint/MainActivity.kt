@@ -17,23 +17,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //CK - created timer here to have Splash Screen showing for 3 seconds
-        val timer = object : Thread() {
-            override fun run() {
-                try {
-                    //Display for 3 seconds
-                    Thread.sleep(3000)
-                } catch (e: InterruptedException) {
-                    // TODO: handle exception
-                    e.printStackTrace()
-                } finally {
-                    //Goes to Activity  StartingPoint.java(STARTINGPOINT)
-                    val openstartingpoint = Intent("x.y.z.START")
-                    startActivity(openstartingpoint)
-                }
-            }
-        }
-        timer.start()
+//        val timer = object : Thread() {
+//            override fun run() {
+//                try {
+//                    //Display for 3 seconds
+//                    Thread.sleep(3000)
+//                } catch (e: InterruptedException) {
+//                    // TODO: handle exception
+//                    e.printStackTrace()
+//                } finally {
+//                    //Goes to Activity  StartingPoint.java(STARTINGPOINT)
+//                    val openstartingpoint = Intent("x.y.z.START")
+//                    startActivity(openstartingpoint)
+//                }
+//            }
+//        }
+//        timer.start()
 
+        Thread.sleep(3000)
         setContentView(R.layout.activity_main)
     }
 
