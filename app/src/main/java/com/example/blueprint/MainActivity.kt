@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.content.Intent
 import androidx.core.app.ComponentActivity
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
@@ -19,6 +18,8 @@ import android.provider.MediaStore
 import android.widget.Toast
 import android.net.Uri
 import kotlinx.android.synthetic.main.activity_main.*
+import android.view.Window
+import android.view.WindowManager
 
 class MainActivity : AppCompatActivity() {
     private val PERMISSION_CODE = 1000
@@ -29,27 +30,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);    this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //CK - created timer here to have Splash Screen showing for 3 seconds
-//        val timer = object : Thread() {
-//            override fun run() {
-//                try {
-//                    //Display for 3 seconds
-//                    Thread.sleep(3000)
-//                } catch (e: InterruptedException) {
-//                    // TODO: handle exception
-//                    e.printStackTrace()
-//                } finally {
-//                    //Goes to Activity  StartingPoint.java(STARTINGPOINT)
-//                    val openstartingpoint = Intent("x.y.z.START")
-//                    startActivity(openstartingpoint)
-//                }
-//            }
-//        }
-//        timer.start()
-
         Thread.sleep(3000)
+
         setContentView(R.layout.activity_main)
+
 
         capture_btn.setOnClickListener{
             if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
