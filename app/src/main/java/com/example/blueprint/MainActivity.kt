@@ -19,7 +19,12 @@ import android.widget.Toast
 import android.net.Uri
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.Window
+import android.view.Gravity;
 import android.view.WindowManager
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupWindow
+import kotlinx.android.synthetic.*
 
 class MainActivity : AppCompatActivity() {
     private val PERMISSION_CODE = 1000
@@ -30,7 +35,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);    this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        //CK - hide notification bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
         //CK - created timer here to have Splash Screen showing for 3 seconds
         Thread.sleep(3000)
 
@@ -48,6 +57,17 @@ class MainActivity : AppCompatActivity() {
                 //permission was enabled
                 openCamera()
             }
+        }
+
+        howto_btn.setOnClickListener {
+            val window = PopupWindow(this)
+            val view = layoutInflater.inflate(R.layout.popup, null)
+            window.contentView = view
+            val imageView = view.findViewById<ImageView>(R.id.imageView)
+            imageView.setOnClickListener {
+                window.dismiss()
+            }
+            window.showAtLocation(findViewById(R.id.main), Gravity.CENTER,0,0)
         }
     }
 
