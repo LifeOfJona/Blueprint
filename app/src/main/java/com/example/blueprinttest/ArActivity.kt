@@ -13,12 +13,9 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.FileInputStream
-import java.io.InputStream
-import java.util.concurrent.Callable
 
 
-class MainActivity : AppCompatActivity() {
+class ArActivity : AppCompatActivity() {
 
     private lateinit var arFragment: ArFragment
 
@@ -27,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_ar)
 
         arFragment = sceneform_fragment as ArFragment
 
@@ -143,7 +140,7 @@ class MainActivity : AppCompatActivity() {
                 addNodeToScene(fragment, anchor, it)
             }
             .exceptionally {
-                Toast.makeText(this@MainActivity, "Could not fetch model from $model", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ArActivity, "Could not fetch model from $model", Toast.LENGTH_SHORT).show()
                 return@exceptionally null
             }
     }
