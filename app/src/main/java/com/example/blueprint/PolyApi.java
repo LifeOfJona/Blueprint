@@ -1,8 +1,7 @@
-package com.example.blueprinttest;
+package com.example.blueprint;
 
 import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
 
 public class PolyApi {
 

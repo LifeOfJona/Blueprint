@@ -1,4 +1,4 @@
-package com.example.blueprinttest;
+package com.example.blueprint;
 
 import android.os.Handler;
 

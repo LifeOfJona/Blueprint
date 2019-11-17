@@ -20,6 +20,7 @@ import android.net.Uri
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.Window
 import android.view.Gravity;
+import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
@@ -45,6 +46,14 @@ class MainActivity : AppCompatActivity() {
         capture_btn.setOnClickListener{
             //start scan activity
         }
+
+        place_btn.setOnClickListener (object: View.OnClickListener {
+            override fun onClick(view: View): Unit {
+                // Handler code here.
+                val intent = Intent(this@MainActivity, ArActivity::class.java)
+                startActivity(intent)
+            }
+        })
 
         howto_btn.setOnClickListener {
             val window = PopupWindow(this)

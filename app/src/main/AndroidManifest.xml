@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.blueprinttest">
+    package="com.example.blueprint">
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-feature
@@ -27,7 +27,7 @@
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />
-        <activity android:name=".ArActivity">
+        <activity android:name="com.example.blueprint.ArActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

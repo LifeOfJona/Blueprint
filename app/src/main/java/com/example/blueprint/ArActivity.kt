@@ -1,4 +1,4 @@
-package com.example.blueprinttest
+package com.example.blueprint
 
 import android.graphics.Point
 import android.net.Uri
@@ -12,7 +12,7 @@ import com.google.ar.sceneform.assets.RenderableSource
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_ar.*
 
 
 class ArActivity : AppCompatActivity() {
