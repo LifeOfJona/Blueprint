@@ -4,7 +4,7 @@
 <!--    <item android:drawable="@color/colorSplash" />-->
 
     <item>
-        <bitmap android:src="@drawable/loading_screen" />
+        <bitmap android:src="@drawable/testloadingscreen" />
 <!--            android:gravity="center"-->
 <!--            />-->
 
