@@ -8,10 +8,14 @@ import android.view.View
 import android.widget.Toast
 import com.google.ar.core.*
 import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.assets.RenderableSource
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.FileInputStream
+import java.io.InputStream
+import java.util.concurrent.Callable
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set the onclick lister for our button
         // Change this string to point to the .sfb file of your choice :)
-        floatingActionButton.setOnClickListener { addObject(Uri.parse("model.sfb")) }
+        floatingActionButton.setOnClickListener { addObject(Uri.parse("model.gltf")) }
         showFab(false)
 
     }
@@ -129,16 +133,21 @@ class MainActivity : AppCompatActivity() {
      */
     private fun placeObject(fragment: ArFragment, anchor: Anchor, model: Uri) {
         ModelRenderable.builder()
-            .setSource(fragment.context, model)
+            .setSource(fragment.context, RenderableSource.builder().setScale(.5f).setSource(
+                fragment.context,
+                model,
+                RenderableSource.SourceType.GLTF2).build())
+            .setRegistryId(model)
             .build()
             .thenAccept {
                 addNodeToScene(fragment, anchor, it)
             }
             .exceptionally {
-                Toast.makeText(this@MainActivity, "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Could not fetch model from $model", Toast.LENGTH_SHORT).show()
                 return@exceptionally null
             }
     }
+
 
     /**
      * @param fragment our fragment
@@ -158,5 +167,9 @@ class MainActivity : AppCompatActivity() {
         transformableNode.setParent(anchorNode)
         fragment.arSceneView.scene.addChild(anchorNode)
         transformableNode.select()
+    }
+
+    private fun downloadModel(item:String){
+
     }
 }
