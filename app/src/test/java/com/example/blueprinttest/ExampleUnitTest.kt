@@ -1,4 +1,4 @@
-package com.example.blueprint
+package com.example.blueprinttest
 
 import org.junit.Test
 
