@@ -6,6 +6,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
 tools:context=".MainJava">
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -31,8 +32,7 @@ tools:context=".MainJava">
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        app:srcCompat="@android:drawable/alert_dark_frame"
-        android:contentDescription="@string/todo" />
+        app:srcCompat="@android:drawable/alert_dark_frame" />
 
     <Button
         android:id="@+id/takePicture"

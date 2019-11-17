@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -46,6 +47,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
     public class MainJava extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "MainActivity";
     private static final int RECORD_REQUEST_CODE = 101;
@@ -84,15 +86,12 @@ import butterknife.ButterKnife;
         feature.setMaxResults(10);
 
         spinnerVisionAPI.setOnItemSelectedListener(this);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, visionAPI);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, visionAPI);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerVisionAPI.setAdapter(dataAdapter);
 
-        takePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        takePicture.setOnClickListener((View view) -> {
                 takePictureFromCamera();
-            }
         });
     }
 
@@ -132,14 +131,12 @@ import butterknife.ButterKnife;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == RECORD_REQUEST_CODE) {
-            if (grantResults.length == 0 && grantResults[0] == PackageManager.PERMISSION_DENIED
-                    && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+        if (requestCode == RECORD_REQUEST_CODE)
+            if (grantResults.length == 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 finish();
             } else {
                 takePicture.setVisibility(View.VISIBLE);
             }
-        }
     }
 
     private void callCloudVision(final Bitmap bitmap, final Feature feature) {
@@ -159,7 +156,7 @@ import butterknife.ButterKnife;
             @Override
             protected String doInBackground(Object... params) {
                 try {
-
+                    Log.d(TAG, "Yeet");
                     HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
                     JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
@@ -189,7 +186,8 @@ import butterknife.ButterKnife;
                 visionAPIData.setText(result);
                 imageUploadProgress.setVisibility(View.INVISIBLE);
             }
-        };
+        }.execute();
+
     }
 
     @NonNull
@@ -274,6 +272,7 @@ import butterknife.ButterKnife;
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         api = (String) adapterView.getItemAtPosition(i);
         feature.setType(api);
+
         if (bitmap != null)
             callCloudVision(bitmap, feature);
     }
