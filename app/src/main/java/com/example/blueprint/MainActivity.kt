@@ -46,9 +46,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        capture_btn.setOnClickListener{
-            //start scan activity
-        }
+        capture_btn.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(view: View): Unit {
+                // Handler code here.
+                val intent = Intent(this@MainActivity, MainJava::class.java)
+                startActivity(intent)
+            }
+        })
 
         place_btn.setOnClickListener (object: View.OnClickListener {
             override fun onClick(view: View): Unit {
