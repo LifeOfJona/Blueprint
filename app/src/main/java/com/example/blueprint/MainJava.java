@@ -82,7 +82,7 @@ import butterknife.ButterKnife;
         ButterKnife.bind(this);
 
         feature = new Feature();
-        feature.setType(visionAPI[0]);
+        feature.setType("LABEL_DETECTION");
         feature.setMaxResults(10);
 
         spinnerVisionAPI.setOnItemSelectedListener(this);
