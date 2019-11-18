@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">BlueprintTest</string>
+    <string name="app_name">Blueprint</string>
+    <string name="take_picture">Take Picture</string>
 </resources>

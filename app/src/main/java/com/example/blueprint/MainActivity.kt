@@ -6,6 +6,8 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
+import java.io.IOException
+import java.text.SimpleDateFormat
 import android.os.Bundle
 import androidx.core.app.ComponentActivity
 import androidx.core.app.ComponentActivity.ExtraData
@@ -17,6 +19,7 @@ import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
 import android.net.Uri
+import android.os.Environment
 import kotlinx.android.synthetic.main.activity_main.*
 import android.view.Window
 import android.view.Gravity;
@@ -43,9 +46,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        capture_btn.setOnClickListener{
-            //start scan activity
-        }
+        capture_btn.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(view: View): Unit {
+                // Handler code here.
+                val intent = Intent(this@MainActivity, MainJava::class.java)
+                startActivity(intent)
+            }
+        })
 
         place_btn.setOnClickListener (object: View.OnClickListener {
             override fun onClick(view: View): Unit {
