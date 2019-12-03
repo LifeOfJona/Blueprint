@@ -15,13 +15,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ArrayAdapter;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -50,17 +48,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainJava extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+    public class MainJava extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "MainActivity";
     private static final int RECORD_REQUEST_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 102;
+
     private static final String CLOUD_VISION_API_KEY = "AIzaSyCu8ykV8N9VGB2qHOwnsfOJbk8JHHs3qos";
 
     @BindView(R.id.takePicture)
-    ImageButton takePicture;
-
-    @BindView(R.id.ok)
-    ImageButton buttonOk;
+    Button takePicture;
 
     @BindView(R.id.imageProgress)
     ProgressBar imageUploadProgress;
@@ -71,34 +67,32 @@ public class MainJava extends AppCompatActivity implements AdapterView.OnItemSel
     @BindView(R.id.spinnerVisionAPI)
     Spinner spinnerVisionAPI;
 
-    //@BindView(R.id.visionAPIData)
-    //TextView visionAPIData;
+    @BindView(R.id.visionAPIData)
+    TextView visionAPIData;
     private Feature feature;
     private Bitmap bitmap;
-    private List<String> descriptions = new ArrayList<>();
+    private String[] visionAPI = new String[]{"LANDMARK_DETECTION", "LOGO_DETECTION", "SAFE_SEARCH_DETECTION", "IMAGE_PROPERTIES", "LABEL_DETECTION"};
 
-    //private String[] visionAPI = new String[]{"Select Property"};
-    //private String api = visionAPI[0];
+    private String api = visionAPI[0];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.scanactivity);
         ButterKnife.bind(this);
+
         feature = new Feature();
         feature.setType("LABEL_DETECTION");
         feature.setMaxResults(10);
-        takePicture.setOnClickListener((View view) -> {
-            takePictureFromCamera();
-        });
 
-       /* buttonOk.setOnClickListener (new View.OnClickListener ())
-            override fun onClick(view: View): Unit {
-                // Handler code here.
-                val intent = Intent(this, ArActivity::class.java)
-                startActivity(intent)
-            }
-        })*/
+        spinnerVisionAPI.setOnItemSelectedListener(this);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, visionAPI);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerVisionAPI.setAdapter(dataAdapter);
+
+        takePicture.setOnClickListener((View view) -> {
+                takePictureFromCamera();
+        });
     }
 
     @Override
@@ -128,7 +122,6 @@ public class MainJava extends AppCompatActivity implements AdapterView.OnItemSel
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             bitmap = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(bitmap);
@@ -163,6 +156,7 @@ public class MainJava extends AppCompatActivity implements AdapterView.OnItemSel
             @Override
             protected String doInBackground(Object... params) {
                 try {
+                    Log.d(TAG, "Yeet");
                     HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
                     JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
 
@@ -189,17 +183,10 @@ public class MainJava extends AppCompatActivity implements AdapterView.OnItemSel
             }
 
             protected void onPostExecute(String result) {
-                //visionAPIData.setText(result);
+                visionAPIData.setText(result);
                 imageUploadProgress.setVisibility(View.INVISIBLE);
             }
         }.execute();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, descriptions);;
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerVisionAPI.setAdapter(dataAdapter);
-        //dataAdapter.notifyDataSetChanged();
-        spinnerVisionAPI.setOnItemSelectedListener(this);
-       // String message = spinnerVisionAPI.getSelectedItem().toString();
-       // log.d(TAG,message);
 
     }
 
@@ -222,41 +209,70 @@ public class MainJava extends AppCompatActivity implements AdapterView.OnItemSel
         AnnotateImageResponse imageResponses = response.getResponses().get(0);
 
         List<EntityAnnotation> entityAnnotations;
-        entityAnnotations = imageResponses.getLabelAnnotations();
 
-        String message = formatAnnotation(entityAnnotations);
-
+        String message = "";
+        switch (api) {
+            case "LANDMARK_DETECTION":
+                entityAnnotations = imageResponses.getLandmarkAnnotations();
+                message = formatAnnotation(entityAnnotations);
+                break;
+            case "LOGO_DETECTION":
+                entityAnnotations = imageResponses.getLogoAnnotations();
+                message = formatAnnotation(entityAnnotations);
+                break;
+            case "SAFE_SEARCH_DETECTION":
+                SafeSearchAnnotation annotation = imageResponses.getSafeSearchAnnotation();
+                message = getImageAnnotation(annotation);
+                break;
+            case "IMAGE_PROPERTIES":
+                ImageProperties imageProperties = imageResponses.getImagePropertiesAnnotation();
+                message = getImageProperty(imageProperties);
+                break;
+            case "LABEL_DETECTION":
+                entityAnnotations = imageResponses.getLabelAnnotations();
+                message = formatAnnotation(entityAnnotations);
+                break;
+        }
         return message;
     }
 
+    private String getImageAnnotation(SafeSearchAnnotation annotation) {
+        return String.format("adult: %s\nmedical: %s\nspoofed: %s\nviolence: %s\n",
+                annotation.getAdult(),
+                annotation.getMedical(),
+                annotation.getSpoof(),
+                annotation.getViolence());
+    }
 
+    private String getImageProperty(ImageProperties imageProperties) {
+        String message = "";
+        DominantColorsAnnotation colors = imageProperties.getDominantColors();
+        for (ColorInfo color : colors.getColors()) {
+            message = message + "" + color.getPixelFraction() + " - " + color.getColor().getRed() + " - " + color.getColor().getGreen() + " - " + color.getColor().getBlue();
+            message = message + "\n";
+        }
+        return message;
+    }
 
     private String formatAnnotation(List<EntityAnnotation> entityAnnotation) {
         String message = "";
 
         if (entityAnnotation != null) {
             for (EntityAnnotation entity : entityAnnotation) {
-
-                System.out.println(entity.getDescription());
-                descriptions.add(entity.getDescription());
-
-//
                 message = message + "    " + entity.getDescription() + " " + entity.getScore();
                 message += "\n";
             }
         } else {
             message = "Nothing Found";
-
-
         }
-
         return message;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        //api = (String) adapterView.getItemAtPosition(i);
-        //feature.setType(api);
+        api = (String) adapterView.getItemAtPosition(i);
+        feature.setType(api);
+
         if (bitmap != null)
             callCloudVision(bitmap, feature);
     }
@@ -264,11 +280,5 @@ public class MainJava extends AppCompatActivity implements AdapterView.OnItemSel
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
-    }
-
-    public void Start_AR(View view)
-    {
-        Intent intent = new Intent(MainJava.this, ArActivity.class);
-        startActivity(intent);
     }
 }

@@ -13,34 +13,19 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import kotlinx.android.synthetic.main.activity_ar.*
-import com.github.kittinunf.fuel.android.extension.responseJson
-import com.github.kittinunf.fuel.httpDownload
-import com.github.kittinunf.fuel.httpGet
 
 
 class ArActivity : AppCompatActivity() {
-
-    companion object {
-        const val APIKey = "AIzaSyCu8ykV8N9VGB2qHOwnsfOJbk8JHHs3qos"
-        val assetURL = "https://poly.googleapis.com/v1/assets"
-    }
 
     private lateinit var arFragment: ArFragment
 
     private var isTracking: Boolean = false
     private var isHitting: Boolean = false
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ar)
 
-        
-        assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseJson{request, response, result -> println(response)}
-
-
-        
         arFragment = sceneform_fragment as ArFragment
 
         // Adds a listener to the ARSceneView
