@@ -53,6 +53,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0-rc01'
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'com.google.ar.sceneform:assets:1.13.0'
+    implementation 'com.github.kittinunf.fuel:fuel-android:1.13.0'
+}
     //new implementations to test
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
