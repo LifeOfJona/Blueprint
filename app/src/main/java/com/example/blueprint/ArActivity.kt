@@ -35,13 +35,7 @@ class ArActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //    setContentView(R.layout.activity_ar)
 
-
-        // assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseString { request, response, result -> println("AAA"+response); println("BBB"+result) }
-
-//        val (request,response,result)= assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseString()
-//        val (payload,error) = result
-//        println("AAAAAAAA" + result)
-//        println("AAAA"+response)
+        arFragment = sceneform_fragment as ArFragment
 
         assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseJson { request, response, result ->
 
