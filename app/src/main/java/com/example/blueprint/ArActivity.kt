@@ -14,46 +14,80 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import kotlinx.android.synthetic.main.activity_ar.*
 import com.github.kittinunf.fuel.android.extension.responseJson
-import com.github.kittinunf.fuel.httpDownload
 import com.github.kittinunf.fuel.httpGet
-
 
 class ArActivity : AppCompatActivity() {
 
     companion object {
         const val APIKey = "AIzaSyCu8ykV8N9VGB2qHOwnsfOJbk8JHHs3qos"
         val assetURL = "https://poly.googleapis.com/v1/assets"
+        var foundItem:String = "BBBB"
     }
 
     private lateinit var arFragment: ArFragment
 
     private var isTracking: Boolean = false
     private var isHitting: Boolean = false
-
+    var rValue:Any? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ar)
-
-        
-        assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseJson{request, response, result -> println(response)}
+        //    setContentView(R.layout.activity_ar)
 
 
-        
-        arFragment = sceneform_fragment as ArFragment
+        // assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseString { request, response, result -> println("AAA"+response); println("BBB"+result) }
 
-        // Adds a listener to the ARSceneView
-        // Called before processing each frame
-        arFragment.arSceneView.scene.addOnUpdateListener { frameTime ->
-            arFragment.onUpdate(frameTime)
-            onUpdate()
+//        val (request,response,result)= assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseString()
+//        val (payload,error) = result
+//        println("AAAAAAAA" + result)
+//        println("AAAA"+response)
+
+        assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseJson { request, response, result ->
+
+            result.fold({
+                println("COCKs " +it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["url"])
+               rValue = it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["url"]
+                println("Kill me " +rValue)
+            },{
+                Toast.makeText(this, "Unable to download resource", Toast.LENGTH_SHORT).show()
+            })
+
         }
+        println("DICKS  " + rValue)
+     //   println("DICKS " + downloadModel())
 
-        // Set the onclick lister for our button
-        // Change this string to point to the .sfb file of your choice :)
-        floatingActionButton.setOnClickListener { addObject(Uri.parse("model.gltf")) }
-        showFab(false)
+//           result.fold({
+//               val asset = it.obj()
+//               var objectURL: String? = null
+//
+//               val assetFormats = asset.getJSONArray("formats")
+//
+//               for(i in 0 until assetFormats.length()){
+//                   val currentFormat = assetFormats.getJSONObject(i)
+//
+//                   if (currentFormat.getString("formatType")=="GLTF"){
+//                       objectURL = currentFormat.getJSONObject("root").getString("url")
+//                       println(objectURL)
+//                   }
+//               }
+//       })}
+
+        //  println("AAAAA" + foundItem)
+
+//        arFragment = sceneform_fragment as ArFragment
+//
+//        // Adds a listener to the ARSceneView
+//        // Called before processing each frame
+//        arFragment.arSceneView.scene.addOnUpdateListener { frameTime ->
+//            arFragment.onUpdate(frameTime)
+//            onUpdate()
+//        }
+//
+//        // Set the onclick lister for our button
+//        // Change this string to point to the .sfb file of your choice :)
+//        floatingActionButton.setOnClickListener { addObject(Uri.parse("model.gltf")) }
+//        showFab(false)
 
     }
 
@@ -181,7 +215,19 @@ class ArActivity : AppCompatActivity() {
         transformableNode.select()
     }
 
-    private fun downloadModel(item:String){
+    private fun downloadModel(): Any? {
+        var rValue:Any? = null
+        rValue = assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseJson { request, response, result ->
 
+        result.fold({
+           println("COCKs " +it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["url"])
+             it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["url"]
+        },{
+            Toast.makeText(this, "Unable to download resource", Toast.LENGTH_SHORT).show()
+          })
+
+        }
+        return rValue
     }
+
 }
