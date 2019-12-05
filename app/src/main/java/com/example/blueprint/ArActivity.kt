@@ -13,6 +13,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import kotlinx.android.synthetic.main.activity_ar.*
+<<<<<<< HEAD
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.httpDownload
 import com.github.kittinunf.fuel.httpGet
@@ -27,12 +28,21 @@ class ArActivity : AppCompatActivity() {
         var foundItem:String = "BBBB"
     }
 
+=======
+
+
+class ArActivity : AppCompatActivity() {
+
+>>>>>>> parent of de240ac... Merge branch 'dev_CK3' of https://github.com/LifeOfJona/Blueprint into dev_CK3
     private lateinit var arFragment: ArFragment
 
     private var isTracking: Boolean = false
     private var isHitting: Boolean = false
+<<<<<<< HEAD
     var rValue:String? = null
 
+=======
+>>>>>>> parent of de240ac... Merge branch 'dev_CK3' of https://github.com/LifeOfJona/Blueprint into dev_CK3
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
