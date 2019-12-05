@@ -14,8 +14,10 @@ import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
 import kotlinx.android.synthetic.main.activity_ar.*
 import com.github.kittinunf.fuel.android.extension.responseJson
+import com.github.kittinunf.fuel.httpDownload
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result;
+import java.io.File
 
 class ArActivity : AppCompatActivity() {
 
@@ -42,7 +44,7 @@ class ArActivity : AppCompatActivity() {
             result.get()
             result.fold({
                rValue = it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["url"] as String?
-                println("Kill me " +rValue)
+                rValue?.httpDownload()?.destination{_,_-> File(filesDir,it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["relativePath"]) }
 
         // Adds a listener to the ARSceneView
         // Called before processing each frame
