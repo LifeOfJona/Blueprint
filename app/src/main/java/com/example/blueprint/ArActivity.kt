@@ -15,6 +15,7 @@ import com.google.ar.sceneform.ux.TransformableNode
 import kotlinx.android.synthetic.main.activity_ar.*
 import com.github.kittinunf.fuel.android.extension.responseJson
 import com.github.kittinunf.fuel.httpGet
+import com.github.kittinunf.result.Result;
 
 class ArActivity : AppCompatActivity() {
 
@@ -28,27 +29,51 @@ class ArActivity : AppCompatActivity() {
 
     private var isTracking: Boolean = false
     private var isHitting: Boolean = false
-    var rValue:Any? = null
+    var rValue:String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //    setContentView(R.layout.activity_ar)
+        setContentView(R.layout.activity_ar)
 
         arFragment = sceneform_fragment as ArFragment
 
         assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseJson { request, response, result ->
-
+            result.get()
             result.fold({
-                println("COCKs " +it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["url"])
-               rValue = it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["url"]
+               rValue = it.obj().getJSONArray("assets").getJSONObject(0).getJSONArray("formats").getJSONObject(1).getJSONObject("root")["url"] as String?
                 println("Kill me " +rValue)
+
+        // Adds a listener to the ARSceneView
+        // Called before processing each frame
+        arFragment.arSceneView.scene.addOnUpdateListener { frameTime ->
+            arFragment.onUpdate(frameTime)
+            onUpdate()
+        }
+
+        // Set the onclick lister for our button
+        // Change this string to point to the .sfb file of your choice :)
+        floatingActionButton.setOnClickListener { addObject(Uri.parse(rValue)) }
+        showFab(false)
             },{
                 Toast.makeText(this, "Unable to download resource", Toast.LENGTH_SHORT).show()
             })
 
         }
-        println("DICKS  " + rValue)
+
+//        val(request,response,result) = assetURL.httpGet(listOf("key" to APIKey,"keywords" to "chair","pageSize" to 1)).responseJson()
+//        when(result){
+//            is Result.Failure -> {
+//                val ex = result.getException()
+//                println("not this"+ex)
+//            }
+//            is Result.Success ->{
+//                val end = result.get()
+//                println("WORK "+ end)
+//            }
+//        }
+//        println("DICKS  " + rValue)
+
      //   println("DICKS " + downloadModel())
 
 //           result.fold({
