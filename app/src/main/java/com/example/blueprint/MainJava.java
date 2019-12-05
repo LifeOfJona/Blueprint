@@ -48,8 +48,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnItemSelected;
 
-    public class MainJava extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+public class MainJava extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
     private static final String TAG = "MainActivity";
     private static final int RECORD_REQUEST_CODE = 101;
     private static final int CAMERA_REQUEST_CODE = 102;
@@ -66,12 +67,14 @@ import butterknife.ButterKnife;
 
     @BindView(R.id.spinnerVisionAPI)
     Spinner spinnerVisionAPI;
+    //Spinner spinnerVisionAPI = findViewById(R.id.spinnerVisionAPI);
 
     @BindView(R.id.visionAPIData)
     TextView visionAPIData;
     private Feature feature;
     private Bitmap bitmap;
     private List<String> descriptions = new ArrayList<>();
+    private String detectedObject;
 
 //    private String[] visionAPI = new String[]{"LANDMARK_DETECTION", "LOGO_DETECTION", "SAFE_SEARCH_DETECTION", "IMAGE_PROPERTIES", "LABEL_DETECTION"};
 //
@@ -86,15 +89,11 @@ import butterknife.ButterKnife;
         feature = new Feature();
         feature.setType("LABEL_DETECTION");
         feature.setMaxResults(10);
-
-
-
-
-
-
         takePicture.setOnClickListener((View view) -> {
                 takePictureFromCamera();
         });
+
+        load_spinner();
     }
 
     @Override
@@ -187,12 +186,10 @@ import butterknife.ButterKnife;
             protected void onPostExecute(String result) {
                 visionAPIData.setText(result);
                 imageUploadProgress.setVisibility(View.INVISIBLE);
+
             }
         }.execute();
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, descriptions);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerVisionAPI.setAdapter(dataAdapter);
-        spinnerVisionAPI.setOnItemSelectedListener(this);
+
     }
 
     @NonNull
@@ -231,8 +228,8 @@ import butterknife.ButterKnife;
 
                 System.out.println(entity.getDescription());
                 descriptions.add(entity.getDescription());
+               // dataAdapter.add(entity.getDescription());
 
-//
                 message = message + "    " + entity.getDescription() + " " + entity.getScore();
                 message += "\n";
             }
@@ -249,6 +246,8 @@ import butterknife.ButterKnife;
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         //api = (String) adapterView.getItemAtPosition(i);
         //feature.setType(api);
+        detectedObject = (String) adapterView.getSelectedItem();
+        System.out.println(detectedObject);
 
         if (bitmap != null)
             callCloudVision(bitmap, feature);
@@ -258,4 +257,13 @@ import butterknife.ButterKnife;
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+    private void load_spinner(){
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerVisionAPI.setAdapter(dataAdapter);
+        spinnerVisionAPI.setOnItemSelectedListener(this);
+        //spinnerVisionAPI.setPrompt("Select One");
+    }
+
 }
