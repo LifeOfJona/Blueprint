@@ -25,4 +25,7 @@ Built with **Kotlin**.
 
 **Author(s)**: Cengiz Sirlan, Ross Malcolm, Chris Karlin, Jason Barboza and Jona Sahota.
 
-![](https://i.gyazo.com/98d5aa658a600ffa9167b343489fa72a.png)
+**Screenshot**:
+<p align="center">
+  <img width="460" height="300" src="https://i.gyazo.com/98d5aa658a600ffa9167b343489fa72a.png">
+</p>
