@@ -27,5 +27,5 @@ Built with **Kotlin**.
 
 **Screenshot**:
 <p align="center">
-  <img width="460" height="300" src="https://i.gyazo.com/98d5aa658a600ffa9167b343489fa72a.png">
+  <img width="460" height="600" src="https://i.gyazo.com/98d5aa658a600ffa9167b343489fa72a.png">
 </p>
